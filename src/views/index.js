@@ -1,2 +1,2 @@
 export { default as UploadFile } from './upload-file/UploadFile'
-export { default as FileOptions } from './upload-file/FileOptions'
+export { default as FileOptions } from './file-options/FileOptions'
