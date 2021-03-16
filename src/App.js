@@ -22,7 +22,9 @@ const App = () => {
   const CurrentView = props => useCurrentView(view, props)
   return (
     <div className="app">
-      <NavigationBar />
+      <NavigationBar 
+        navigateHome={() => setView('upload-image')}
+      />
       <CurrentView 
         demoProp="yooo"
       />
