@@ -2,7 +2,11 @@ import React from 'react'
 import { Card } from 'react-bootstrap'
 import UploadButton from './UploadButton'
 
-const UploadImage = props => {
+const UploadFile = props => {
+  const handleFileUpload = (file) => {
+    props.setView('file-options')
+  }
+
   return (
     <div className="view">
       <Card style={styles.card}>
@@ -12,7 +16,7 @@ const UploadImage = props => {
             Upload a photo or audio file you wish to encode with a message
             or extract a message from.
           </Card.Text>
-          <UploadButton />
+          <UploadButton handleFileUpload={handleFileUpload} />
         </Card.Body>
       </Card>
     </div>
@@ -27,4 +31,4 @@ const styles = {
   }
 }
 
-export default UploadImage
+export default UploadFile

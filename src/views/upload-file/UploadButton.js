@@ -12,7 +12,7 @@ const UploadButton = props => {
   // handle when user uploads new file
   const handleChange = e => {
     const file = e.target.files[0]
-    props.handleFile(file)
+    props.handleFileUpload(file)
   }
 
   return (

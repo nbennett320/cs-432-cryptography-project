@@ -1,36 +1,44 @@
 import React from 'react'
 import { NavigationBar } from './components'
-import { UploadImage } from './views'
+import { 
+  UploadFile,
+  FileOptions
+} from './views'
 import './styles/App.css'
 
 // poor man's view router
 const useCurrentView = (view, props) => {
   switch(view) {
-    case 'upload-image':
+    case 'upload-file':
       return (
-        <UploadImage {...props} />
+        <UploadFile {...props} />
       )
-    case 'encode-image':
+    case 'file-option':
+      return (
+        <FileOptions {...props} />
+      )
+    case 'encode-file':
       break
-    case 'decode-image':
+    case 'decode-file':
       break
     default:
       return (
-        <UploadImage {...props} />
+        <UploadFile {...props} />
       )
   }
 }
 
 const App = () => {
   const [view, setView] = React.useState()
+  const [file, setFile] = React.useState()
   const CurrentView = props => useCurrentView(view, props)
   return (
     <div className="app">
       <NavigationBar 
-        navigateHome={() => setView('upload-image')}
+        navigateHome={() => setView('upload-file')}
       />
       <CurrentView 
-        demoProp="yooo"
+        setView={setView}
       />
     </div>
   )
