@@ -3,9 +3,15 @@ import { Card } from 'react-bootstrap'
 import UploadButton from './UploadButton'
 
 const UploadFile = props => {
-  const handleFileUpload = (file) => {
-    props.setView('file-options')
-    props.setFile(file)
+  const handleFileUpload = file => {
+    if(file) {
+      console.log("filetype js:", typeof file)
+      props.setView('file-options')
+      props.setFile({
+        data: file,
+        url: URL.createObjectURL(file)
+      })
+    }
   }
 
   return (
