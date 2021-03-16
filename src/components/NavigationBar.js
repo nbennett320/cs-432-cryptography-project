@@ -7,7 +7,7 @@ import {
 
 const NavigationBar = props => {
   return(
-    <Navbar expand="lg" light bg="light">
+    <Navbar expand="lg" bg="light">
       <Navbar.Brand href="/">
         CS 432 Cryptography Project
       </Navbar.Brand>

@@ -6,40 +6,31 @@ import {
 } from './views'
 import './styles/App.css'
 
-// poor man's view router
-const useCurrentView = (view, props) => {
-  switch(view) {
-    case 'upload-file':
-      return (
-        <UploadFile {...props} />
-      )
-    case 'file-option':
-      return (
-        <FileOptions {...props} />
-      )
-    case 'encode-file':
-      break
-    case 'decode-file':
-      break
-    default:
-      return (
-        <UploadFile {...props} />
-      )
-  }
-}
-
 const App = () => {
+  // poor man's view router
   const [view, setView] = React.useState()
   const [file, setFile] = React.useState()
-  const CurrentView = props => useCurrentView(view, props)
+
+  React.useEffect(() => {
+    console.log('view changed: ', view)
+  }, [view])
+
   return (
     <div className="app">
       <NavigationBar 
         navigateHome={() => setView('upload-file')}
       />
-      <CurrentView 
-        setView={setView}
-      />
+      {view === 'upload-file' && <UploadFile 
+        setView={setView} 
+        setFile={setFile} 
+      />}
+      {view === 'file-options' && <FileOptions file={file} />}
+      {/* {view === 'encode-file' && <UploadFile {...props} />} */}
+      {/* {view === 'decode-file' && <UploadFile {...props} />} */}
+      {!view && <UploadFile 
+        setView={setView} 
+        setFile={setFile}
+      />}
     </div>
   )
 }

@@ -5,6 +5,7 @@ import UploadButton from './UploadButton'
 const UploadFile = props => {
   const handleFileUpload = (file) => {
     props.setView('file-options')
+    props.setFile(file)
   }
 
   return (

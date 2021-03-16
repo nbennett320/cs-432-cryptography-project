@@ -10,7 +10,6 @@ const ImageOptions = props => {
           <Card.Text>
             Image options
           </Card.Text>
-          <UploadButton />
         </Card.Body>
       </Card>
     </div>
