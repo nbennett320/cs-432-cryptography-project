@@ -7,13 +7,17 @@ import './styles/App.css'
 const useCurrentView = (view, props) => {
   switch(view) {
     case 'upload-image':
-      return <UploadImage {...props} />
+      return (
+        <UploadImage {...props} />
+      )
     case 'encode-image':
       break
     case 'decode-image':
       break
     default:
-      return <UploadImage {...props} />
+      return (
+        <UploadImage {...props} />
+      )
   }
 }
 
