@@ -2,7 +2,8 @@ import React from 'react'
 import { NavigationBar } from './components'
 import { 
   UploadFile,
-  FileOptions
+  FileOptions,
+  EncodeFile
 } from './views'
 import './styles/App.css'
 
@@ -20,12 +21,15 @@ const App = () => {
       <NavigationBar 
         navigateHome={() => setView('upload-file')}
       />
-      {view === 'upload-file' && <UploadFile 
+      {view === 'upload-file' && <UploadFile setFile={setFile} />}
+      {view === 'file-options' && <FileOptions 
+        file={file} 
         setView={setView} 
-        setFile={setFile} 
       />}
-      {view === 'file-options' && <FileOptions file={file} />}
-      {/* {view === 'encode-file' && <UploadFile {...props} />} */}
+      {view === 'encode-file' && <EncodeFile 
+        file={file} 
+        setView={setView} 
+      />}
       {/* {view === 'decode-file' && <UploadFile {...props} />} */}
       {!view && <UploadFile 
         setView={setView} 

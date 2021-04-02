@@ -4,19 +4,15 @@ import {
   Button,
   ButtonGroup
 } from 'react-bootstrap'
-import '../../styles/transitions.css'
 
-const ImageOptions = props => {
-  const [fullImage, setFullImage] = React.useState(false)
-  console.log(props.file)
-
+const EncodeFile = props => {
   return (
     <div className="view">
       <Card style={styles.card}>
         <Card.Img 
           className={[
             "expand-transition", 
-            fullImage ? "image-preview image-preview--expanded" : "image-preview"
+            // fullImage ? "image-preview image-preview--expanded" : "image-preview"
           ]}
           src={props.file.url}
           style={styles.cardImg}
@@ -29,7 +25,7 @@ const ImageOptions = props => {
           </Card.Text>
           <ButtonGroup>
             <Button
-              onClick={() => {props.setView('encode-file')}}
+              onClick={() => {}}
               variant="outline-primary"
             >
               Encode a message
@@ -40,12 +36,12 @@ const ImageOptions = props => {
             >
               Decode from media
             </Button>
-            <Button
+            {/* <Button
               onClick={() => setFullImage(!fullImage)}
               variant="outline-primary"
             >
               { fullImage ? 'Hide' : 'Show' } Full Image
-            </Button>
+            </Button> */}
             {/* <Button
               onClick={() => {}}
               variant="outline-primary"
@@ -73,4 +69,4 @@ const styles = {
   }
 }
 
-export default ImageOptions
+export default EncodeFile
