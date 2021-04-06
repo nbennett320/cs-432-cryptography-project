@@ -5,7 +5,22 @@ import {
   ButtonGroup
 } from 'react-bootstrap'
 
+const loadImage = url => {
+  return new Promise(res =>{
+    const img = new Image()
+    img.src = url
+    img.onload = () => res(img)
+  })
+}
+
 const EncodeFile = props => {
+  const canvasRef = React.useRef()
+  React.useEffect(async () => {
+    const img = await loadImage(props.file.url)
+    const context = canvasRef.current.getContext('2d')
+    context.drawImage(img, 0, 0, canvasRef.current.width, canvasRef.current.height)
+  })
+  
   return (
     <div className="view">
       <Card style={styles.card}>
@@ -51,6 +66,7 @@ const EncodeFile = props => {
           </ButtonGroup>
         </Card.Body>
       </Card>
+      <canvas ref={r => {canvasRef.current = r}} />
     </div>
   )
 }
