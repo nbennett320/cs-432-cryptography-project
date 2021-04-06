@@ -15,24 +15,37 @@ const loadImage = url => {
 
 const EncodeFile = props => {
   const canvasRef = React.useRef()
-  React.useEffect(async () => {
-    const img = await loadImage(props.file.url)
-    const context = canvasRef.current.getContext('2d')
-    context.drawImage(img, 0, 0, canvasRef.current.width, canvasRef.current.height)
+  const [height, setHeight] = React.useState()
+  React.useEffect(() => {
+    const mountCanvas = async () => {
+      const img = await loadImage(props.file.url)
+      const context = canvasRef.current.getContext('2d')
+      setHeight((img.height / canvasRef.current.height) * canvasRef.current.height)
+      canvasRef.current.height = height
+      // const imgAspectRatio = img.width / img.height
+      // const w = img.width / canvasRef.current.width
+      // const h = w * (img.height / canvasRef.current.height) * (Math.abs(imgAspectRatio) < 1 ? img.height : canvasRef.current.height)
+      context.drawImage(img, 0, 0, canvasRef.current.width, canvasRef.current.height)
+    }
+    mountCanvas()
   })
   
   return (
     <div className="view">
       <Card style={styles.card}>
-        <Card.Img 
-          className={[
-            "expand-transition", 
-            // fullImage ? "image-preview image-preview--expanded" : "image-preview"
-          ]}
-          src={props.file.url}
-          style={styles.cardImg}
-          variant="top"
-        />
+        <div style={{
+          ...styles.cardImg,
+          height: `${height}px`
+        }}>
+          <canvas 
+            ref={r => {canvasRef.current = r}} 
+            className={'image-preview--expanded'}
+            style={{
+              ...styles.cardImg,
+              height: `${height}px`
+            }}
+          />
+        </div>
         <Card.Body>
           <Card.Title>Filename: {props.file.data.name}</Card.Title>
           <Card.Text>
@@ -66,7 +79,6 @@ const EncodeFile = props => {
           </ButtonGroup>
         </Card.Body>
       </Card>
-      <canvas ref={r => {canvasRef.current = r}} />
     </div>
   )
 }
