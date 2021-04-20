@@ -1,3 +1,5 @@
+import Pixel from './Pixel'
+
 /**
  * Used for parsing images, especially getting and
  * manipulating pixel data
@@ -48,8 +50,8 @@ class ImageParser {
         this.#_height = res.height
         this.#_width = res.width
         this.#_canvas = new OffscreenCanvas(res.width, res.height)
+        this.#_ctx = this.#_canvas.getContext('2d')
         this.#_imageHasLoaded = true
-        console.log("parsed: ", this)
       })
     } else {
       console.error("Invalid file type: ", this.#_data.type)
@@ -130,6 +132,31 @@ class ImageParser {
   }
 
   /**
+   * 
+   * @param {*} x 
+   * @param {*} y 
+   * @returns 
+   */
+  getPixel = (x, y) => {
+    if(this.#_isValidFile && this.#_imageHasLoaded) {
+      if(this.#_isValidRange(x,y)) {
+        const { data } = this.#_ctx.getImageData(x, y, 1, 1)
+        return new Pixel(data)
+      } else {
+        console.error(`Not a valid pixel; (${x}, ${y}) is not in range of (${this.#_width}, ${this.#_height})`)
+      }
+    } else if(!this.#_imageHasLoaded) {
+
+    } else {
+
+    }
+  }
+
+  getCanvas = () => this.#_canvas
+
+  getCanvasContext = () => this.#_ctx
+
+  /**
    * Return if image has loaded
    * @returns {Boolean} True if loaded
    */
@@ -149,6 +176,8 @@ class ImageParser {
   
   #_validateImage = file => /^image\/(png|jpe?g|gif)$/.test(file.type)
 
+  #_isValidRange = (x, y) => (0 <= y <= this.#_height) && (0 <= x <= this.#_width)
+
   #_imageHasLoaded
   #_isValidFile
   #_data
@@ -156,6 +185,7 @@ class ImageParser {
   #_height
   #_width
   #_canvas
+  #_ctx
 }
 
 export default ImageParser
