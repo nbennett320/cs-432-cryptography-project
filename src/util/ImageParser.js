@@ -1,6 +1,7 @@
 import Pixel from './Pixel'
 
 /**
+ * @class
  * Used for parsing images, especially getting and
  * manipulating pixel data
  */
