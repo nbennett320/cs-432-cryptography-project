@@ -4,48 +4,82 @@ class ImageParser {
     this.#_imageHasLoaded = false
     if(file) {
       if(this.#_validateImage(file)) {
-        this.#_isValidImage = true
+        this.#_isValidFile = true
         this.#_data = file
         this.#_url = URL.createObjectURL(file)
       } else {
-        this.#_isValidImage = false
+        this.#_isValidFile = false
       }
     }
   }
 
+  /**
+   * Load a file (for cases where caller didn't construct
+   * with a file... wish I could just use a separate constructor
+   * like in C++...)
+   */
+  loadFile = file => {
+    if(this.#_validateImage(file)) {
+      this.#_isValidFile = true
+      this.#_data = file
+      this.#_url = URL.createObjectURL(file)
+    } else {
+      console.warn("Error loading file: ", file)
+    }
+  }
+
+  /**
+   * Create and parse image canvas data if file is valid
+   */ 
   parse = async () => {
-    if(this.#_isValidImage) {
+    if(this.#_isValidFile) {
       this.#_canvas = new OffscreenCanvas()
       await this.#_loadImage().then(res => {
         this.#_height = res.height
         this.#_width = res.width
       })
-
+      this.#_imageHasLoaded = true
     } else {
       console.error("Invalid file type: ", this.#_data.type)
     }
   }
 
+  /**
+   * It does what you think
+   * @returns {Number} n pixels
+   */
   getHeight = () => {
-    if(this.#_isValidImage) {
+    if(this.#_isValidFile) {
       return this.#_height
     }
   }
 
+  /**
+   * It does what you think
+   * @returns {Number} n pixels
+   */
   getWidth = () => {
-    if(this.#_isValidImage) {
+    if(this.#_isValidFile) {
       return this.#_width
     }
   }
 
+  /**
+   * Get uploaded file name
+   * @returns {String} filename
+   */
   getName = () => {
-    if(this.#_isValidImage) {
+    if(this.#_isValidFile) {
       return this.#_data.name
     }
   }
 
+  /**
+   * Get the url representing the image
+   * @returns {DOMString} url
+   */
   getUrl = () => {
-    if(this.#_isValidImage) {
+    if(this.#_isValidFile) {
       return this.#_url
     }
   }
@@ -59,8 +93,9 @@ class ImageParser {
   })
   
   #_validateImage = file => /^image\/(png|jpe?g|gif)$/.test(file.type)
+
   #_imageHasLoaded
-  #_isValidImage
+  #_isValidFile
   #_data
   #_url
   #_height
