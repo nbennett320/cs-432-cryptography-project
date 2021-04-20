@@ -4,79 +4,53 @@ import {
   Button,
   ButtonGroup
 } from 'react-bootstrap'
-
-const loadImage = url => {
-  return new Promise(res =>{
-    const img = new Image()
-    img.src = url
-    img.onload = () => res(img)
-  })
-}
+import TextArea from './TextArea'
 
 const EncodeFile = props => {
-  const canvasRef = React.useRef()
-  const [height, setHeight] = React.useState()
-  console.log(props)
+  const [isLoaded, setLoaded] = React.useState(false)
   React.useEffect(() => {
-    const mountCanvas = async () => {
-      const img = await loadImage(props.file.url)
-      const context = canvasRef.current.getContext('2d')
-      setHeight((img.height / canvasRef.current.height) * canvasRef.current.height)
-      canvasRef.current.height = height
-      // const imgAspectRatio = img.width / img.height
-      // const w = img.width / canvasRef.current.width
-      // const h = w * (img.height / canvasRef.current.height) * (Math.abs(imgAspectRatio) < 1 ? img.height : canvasRef.current.height)
-      context.drawImage(img, 0, 0, canvasRef.current.width, canvasRef.current.height)
-    }
-    mountCanvas()
+    props.image.parse().then(() => {
+      setLoaded(true)
+    }, [isLoaded])
   })
-  
+
   return (
     <div className="view">
       <Card style={styles.card}>
-        <div style={{
-          ...styles.cardImg,
-          height: `${height}px`
-        }}>
-          <canvas 
-            ref={r => {canvasRef.current = r}} 
-            className={'image-preview--expanded'}
-            style={{
-              ...styles.cardImg,
-              height: `${height}px`
-            }}
-          />
-        </div>
+        <Card.Img 
+          className={[
+            "expand-transition", 
+            "image-preview image-preview--expanded"
+          ]}
+          src={props.image.getUrl()}
+          style={styles.cardImg}
+          variant="top"
+        />
         <Card.Body>
-          <Card.Title>Filename: {props.file.data.name}</Card.Title>
+          <Card.Title>Filename: {props.image.getName()}</Card.Title>
           <Card.Text>
-            Image options
+            Image resolution: {props.image.getHeight()} &times; 
+            {props.image.getWidth()} pixels
+            <br/>
+            File type: {props.image.getFileType()}
+            <br/>
+            Size: {props.image.getFileSize()}
+            <br/>
           </Card.Text>
+          <TextArea />
           <ButtonGroup>
             <Button
-              onClick={() => {}}
+              onClick={() => {props.setView('encode-file')}}
               variant="outline-primary"
             >
-              Encode a message
+              Encode
             </Button>
             <Button
               onClick={() => {}}
-              variant="outline-primary"
+              variant="outline-secondary"
             >
-              Decode from media
+              Back
             </Button>
-            {/* <Button
-              onClick={() => setFullImage(!fullImage)}
-              variant="outline-primary"
-            >
-              { fullImage ? 'Hide' : 'Show' } Full Image
-            </Button> */}
-            {/* <Button
-              onClick={() => {}}
-              variant="outline-primary"
-            >
-              Restart
-            </Button> */}
           </ButtonGroup>
         </Card.Body>
       </Card>

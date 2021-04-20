@@ -1,5 +1,12 @@
-
+/**
+ * Used for parsing images, especially getting and
+ * manipulating pixel data
+ */
 class ImageParser {
+  /**
+   * Load a file (but don't parse yet)
+   * @param {Object} file File to load
+   */
   constructor(file) {
     this.#_imageHasLoaded = false
     if(file) {
@@ -23,6 +30,7 @@ class ImageParser {
       this.#_isValidFile = true
       this.#_data = file
       this.#_url = URL.createObjectURL(file)
+      console.log("loaded")
     } else {
       console.warn("Error loading file: ", file)
     }
@@ -32,13 +40,17 @@ class ImageParser {
    * Create and parse image canvas data if file is valid
    */ 
   parse = async () => {
-    if(this.#_isValidFile) {
-      this.#_canvas = new OffscreenCanvas()
+    if(this.#_imageHasLoaded) {
+      // image was already parsed
+      console.log("Image was already parsed: ", this)
+    } else if(this.#_isValidFile) {
       await this.#_loadImage().then(res => {
         this.#_height = res.height
         this.#_width = res.width
+        this.#_canvas = new OffscreenCanvas(res.width, res.height)
+        this.#_imageHasLoaded = true
+        console.log("parsed: ", this)
       })
-      this.#_imageHasLoaded = true
     } else {
       console.error("Invalid file type: ", this.#_data.type)
     }
@@ -50,6 +62,7 @@ class ImageParser {
    */
   getHeight = () => {
     if(this.#_isValidFile) {
+      console.log(this.#_height)
       return this.#_height
     }
   }
@@ -60,12 +73,13 @@ class ImageParser {
    */
   getWidth = () => {
     if(this.#_isValidFile) {
+      console.log(this.#_width)
       return this.#_width
     }
   }
 
   /**
-   * Get uploaded file name
+   * Get the name of the uploaded file
    * @returns {String} filename
    */
   getName = () => {
@@ -84,8 +98,42 @@ class ImageParser {
     }
   }
 
+  /**
+   * Get the file extension of the image
+   * @returns {String} file extension
+   */
+  getFileType = () => {
+    if(this.#_isValidFile) {
+      const matches = /^image\/(png|jpe?g|gif)$/.exec(this.#_data.type)
+      const ext = matches[1]
+      return ext
+    }
+  }
+
+  /**
+   * Get human-readable file size
+   * @returns {String} file size
+   */
+  getFileSize = () => {
+    if(this.#_isValidFile) {
+      const matches = /^image\/(png|jpe?g|gif)$/.exec(this.#_data.type)
+      const ext = matches[1]
+      return ext
+    }
+  }
+
+  /**
+   * Return if image has loaded
+   * @returns {Boolean} True if loaded
+   */
+  isLoaded = () => this.#_imageHasLoaded
+
   // private members & methods
 
+  /**
+   * Load the image
+   * @returns {Promise} promise that resolves after the image loads
+   */
   #_loadImage = () => new Promise (res => {
     const img = new Image()
     img.src = this.#_url
