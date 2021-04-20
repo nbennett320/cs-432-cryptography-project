@@ -111,14 +111,21 @@ class ImageParser {
   }
 
   /**
-   * Get human-readable file size
+   * Get human-readable file sizeq
    * @returns {String} file size
    */
   getFileSize = () => {
     if(this.#_isValidFile) {
-      const matches = /^image\/(png|jpe?g|gif)$/.exec(this.#_data.type)
-      const ext = matches[1]
-      return ext
+      const bytes = this.#_data.size
+      const kb = bytes / 1000
+      const mb = bytes / 1000000
+      if(mb > 1) {
+        return `${mb} Mb`
+      } else if(kb > 1) {
+        return `${kb} Kb`
+      } else {
+        return `${bytes} B`
+      }
     }
   }
 
