@@ -5,12 +5,14 @@ import {
   FileOptions,
   EncodeFile
 } from './views'
+import ImageParser from './util/ImageParser'
 import './styles/App.css'
+
+const imageParser = new ImageParser()
 
 const App = () => {
   // poor man's view router
   const [view, setView] = React.useState()
-  const [file, setFile] = React.useState()
 
   React.useEffect(() => {
     console.log('view changed: ', view)
@@ -21,19 +23,22 @@ const App = () => {
       <NavigationBar 
         navigateHome={() => setView('upload-file')}
       />
-      {view === 'upload-file' && <UploadFile setFile={setFile} />}
-      {view === 'file-options' && <FileOptions 
-        file={file} 
+      {view === 'upload-file' && <UploadFile 
         setView={setView} 
+        image={imageParser}
+      />}
+      {view === 'file-options' && <FileOptions 
+        setView={setView} 
+        image={imageParser}
       />}
       {view === 'encode-file' && <EncodeFile 
-        file={file} 
         setView={setView} 
+        image={imageParser}
       />}
       {/* {view === 'decode-file' && <UploadFile {...props} />} */}
       {!view && <UploadFile 
         setView={setView} 
-        setFile={setFile}
+        image={imageParser}
       />}
     </div>
   )

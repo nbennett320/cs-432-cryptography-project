@@ -7,10 +7,7 @@ const UploadFile = props => {
     if(file) {
       console.log("filetype js:", typeof file)
       props.setView('file-options')
-      props.setFile({
-        data: file,
-        url: URL.createObjectURL(file)
-      })
+      props.image.loadFile(file)
     }
   }
 

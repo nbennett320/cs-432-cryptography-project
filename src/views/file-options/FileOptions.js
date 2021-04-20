@@ -8,8 +8,8 @@ import '../../styles/transitions.css'
 
 const ImageOptions = props => {
   const [fullImage, setFullImage] = React.useState(false)
-  console.log(props.file)
-
+  // console.log(props.image)
+  // console.log(props)
   return (
     <div className="view">
       <Card style={styles.card}>
@@ -18,12 +18,12 @@ const ImageOptions = props => {
             "expand-transition", 
             fullImage ? "image-preview image-preview--expanded" : "image-preview"
           ]}
-          src={props.file.url}
+          src={props.image.getUrl()}
           style={styles.cardImg}
           variant="top"
         />
         <Card.Body>
-          <Card.Title>Filename: {props.file.data.name}</Card.Title>
+          <Card.Title>Filename: {props.image.getName()}</Card.Title>
           <Card.Text>
             Image options
           </Card.Text>
