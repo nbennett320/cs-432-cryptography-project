@@ -47,10 +47,12 @@ class ImageParser {
       console.log("Image was already parsed: ", this)
     } else if(this.#_isValidFile) {
       await this.#_loadImage().then(res => {
+        this.#_img = res
         this.#_height = res.height
         this.#_width = res.width
         this.#_canvas = new OffscreenCanvas(res.width, res.height)
         this.#_ctx = this.#_canvas.getContext('2d')
+        this.#_ctx.drawImage(this.#_img, 0, 0)
         this.#_imageHasLoaded = true
       })
     } else {
@@ -132,15 +134,16 @@ class ImageParser {
   }
 
   /**
-   * 
-   * @param {*} x 
-   * @param {*} y 
+   * Get the pixel at the position (x, y)
+   * @param {Number} x x coord starting from top left of the image
+   * @param {Number} y y coord starting from top left of the image
    * @returns 
    */
   getPixel = (x, y) => {
     if(this.#_isValidFile && this.#_imageHasLoaded) {
       if(this.#_isValidRange(x,y)) {
         const { data } = this.#_ctx.getImageData(x, y, 1, 1)
+        console.log("data before constructing pixel: ", data)
         return new Pixel(data)
       } else {
         console.error(`Not a valid pixel; (${x}, ${y}) is not in range of (${this.#_width}, ${this.#_height})`)
@@ -182,6 +185,7 @@ class ImageParser {
   #_isValidFile
   #_data
   #_url
+  #_img
   #_height
   #_width
   #_canvas

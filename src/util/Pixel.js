@@ -7,7 +7,7 @@ class Pixel {
    * @param {Object} data object containing rgba values
    */
   constructor(data) {
-    console.log(data)
+    console.log("constructing pixel: ", data)
     this.rgba.r = data[0]
     this.rgba.g = data[1]
     this.rgba.b = data[2]
