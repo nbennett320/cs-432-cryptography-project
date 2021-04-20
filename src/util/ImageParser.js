@@ -94,7 +94,7 @@ class ImageParser {
 
   /**
    * Get the url representing the image
-   * @returns {DOMString} url
+   * @returns {String} url
    */
   getUrl = () => {
     if(this.#_isValidFile) {
@@ -137,13 +137,12 @@ class ImageParser {
    * Get the pixel at the position (x, y)
    * @param {Number} x x coord starting from top left of the image
    * @param {Number} y y coord starting from top left of the image
-   * @returns 
+   * @returns {Pixel} returns Pixel class at x y position
    */
   getPixel = (x, y) => {
     if(this.#_isValidFile && this.#_imageHasLoaded) {
       if(this.#_isValidRange(x,y)) {
         const { data } = this.#_ctx.getImageData(x, y, 1, 1)
-        console.log("data before constructing pixel: ", data)
         return new Pixel(data)
       } else {
         console.error(`Not a valid pixel; (${x}, ${y}) is not in range of (${this.#_width}, ${this.#_height})`)
@@ -155,9 +154,17 @@ class ImageParser {
     }
   }
 
-  getCanvas = () => this.#_canvas
+  /**
+   * Returns offscreen canvas object
+   * @returns {HTMLCanvasElement} canvas object
+   */
+  _getCanvas = () => this.#_canvas
 
-  getCanvasContext = () => this.#_ctx
+  /**
+   * Get canvas context
+   * @returns {CanvasRenderingContext2D} canvas context object
+   */
+  _getCanvasContext = () => this.#_ctx
 
   /**
    * Return if image has loaded
@@ -177,8 +184,19 @@ class ImageParser {
     img.onload = () => res(img)
   })
   
+  /**
+   * Check if image is a valid file type
+   * @param {Object} file file object from uploading
+   * @returns {Boolean} is valid if true
+   */
   #_validateImage = file => /^image\/(png|jpe?g|gif)$/.test(file.type)
 
+  /**
+   * Check if pixel is within canvas boundaries
+   * @param {Number} x x position
+   * @param {Number} y y position
+   * @returns {Boolean} is in range if true
+   */
   #_isValidRange = (x, y) => (0 <= y <= this.#_height) && (0 <= x <= this.#_width)
 
   #_imageHasLoaded
