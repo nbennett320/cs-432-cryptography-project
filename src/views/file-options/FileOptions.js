@@ -9,7 +9,7 @@ import '../../styles/transitions.css'
 const ImageOptions = props => {
   const [fullImage, setFullImage] = React.useState(false)
   console.log(props.file)
-
+  console.log(props)
   return (
     <div className="view">
       <Card style={styles.card}>

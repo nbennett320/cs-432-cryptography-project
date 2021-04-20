@@ -16,6 +16,7 @@ const loadImage = url => {
 const EncodeFile = props => {
   const canvasRef = React.useRef()
   const [height, setHeight] = React.useState()
+  console.log(props)
   React.useEffect(() => {
     const mountCanvas = async () => {
       const img = await loadImage(props.file.url)

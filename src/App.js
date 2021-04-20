@@ -5,12 +5,14 @@ import {
   FileOptions,
   EncodeFile
 } from './views'
+import ImageParser from './util/ImageParser'
 import './styles/App.css'
 
 const App = () => {
   // poor man's view router
   const [view, setView] = React.useState()
   const [file, setFile] = React.useState()
+  let imageParser = new ImageParser()
 
   React.useEffect(() => {
     console.log('view changed: ', view)
