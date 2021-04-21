@@ -1,4 +1,5 @@
 /**
+ * @class
  * Define a pixel class with rgba values and hex value
  */
 class Pixel {
@@ -7,24 +8,31 @@ class Pixel {
    * @param {Object} data object containing rgba values
    */
   constructor(data) {
-    console.log("constructing pixel: ", data)
     this.rgba.r = data[0]
     this.rgba.g = data[1]
     this.rgba.b = data[2]
     this.rgba.a = data[3] / 255
     const hexR = this.#_dec2HexCSubstr(data[0])
-    const hexG = this.#_dec2HexCSubstr(data[0])
-    const hexB = this.#_dec2HexCSubstr(data[0])
+    const hexG = this.#_dec2HexCSubstr(data[1])
+    const hexB = this.#_dec2HexCSubstr(data[2])
     this.hex = '#' + hexR + hexG + hexB
   }
 
-  rgba = { 
+  /**
+   * Object containing RGBA values of a pixel color
+   * @property {Object} rgba
+   */
+  rgba = {
     r: undefined, 
     g: undefined, 
     b: undefined, 
     a: undefined 
   }
 
+  /**
+   * Representation of pixel color in hex color code 
+   * @member {String} hex
+   */
   hex = ""
 
   // private

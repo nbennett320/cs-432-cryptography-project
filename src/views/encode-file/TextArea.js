@@ -2,13 +2,19 @@ import React from 'react'
 import { InputGroup, FormControl } from 'react-bootstrap'
 
 const TextArea = props => {
+  const handleChange = e => props.setMessage(e.target.value)
+
   return (
     <div style={styles.container}>
       <InputGroup>
         <InputGroup.Prepend>
           <InputGroup.Text>Message:</InputGroup.Text>
         </InputGroup.Prepend>
-        <FormControl as="textarea" aria-label="With textarea" />
+        <FormControl 
+          onChange={handleChange}
+          as="textarea" 
+          aria-label="With textarea" 
+        />
       </InputGroup>
     </div>
   )

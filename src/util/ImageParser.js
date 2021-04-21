@@ -1,6 +1,7 @@
 import Pixel from './Pixel'
 
 /**
+ * @class
  * Used for parsing images, especially getting and
  * manipulating pixel data
  */
@@ -83,6 +84,16 @@ class ImageParser {
   }
 
   /**
+   * Return height and width
+   * @returns {Array} [height, width]
+   */
+  getResolution = () => {
+    if(this.#_isValidFile) {
+      return [this.#_height, this.#_width]
+    }
+  }
+
+  /**
    * Get the name of the uploaded file
    * @returns {String} filename
    */
@@ -148,9 +159,7 @@ class ImageParser {
         console.error(`Not a valid pixel; (${x}, ${y}) is not in range of (${this.#_width}, ${this.#_height})`)
       }
     } else if(!this.#_imageHasLoaded) {
-
-    } else {
-
+      console.error(`Image has not loaded, call ImageParser.parse() first.`)
     }
   }
 
