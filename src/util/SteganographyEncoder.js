@@ -1,14 +1,16 @@
-import { range } from './util'
+import { 
+  range, 
+  readFileAsString 
+} from './util'
 import languageServer from 'pyodide'
+import { code } from './python/lsb_encode.py'
 
-const code = "print('hello world')"
+// const code = "print('hello world')"
 
-languageServer.then(() => {
-  const { pyodide } = window
-  pyodide.runPythonAsync(code)
-    .then(out => console.log(out))
-    .catch(err => console.warn(err))
-})
+const readCode = async () => {
+
+  
+}
 
 /**
  * 
@@ -21,6 +23,7 @@ class SteganographyEncoder {
    * @param {String} message 
    */
   constructor(image, message) {
+    // readCode()
     this.#_imageParser = image
     this.#_message = message
   } 
@@ -28,13 +31,31 @@ class SteganographyEncoder {
   /**
    * Encode the message
    */
-  encode = () => {
+  encode = async () => {
     const [height, width] = this.#_imageParser.getResolution()
-    for(let i in range(0, height)) {
-      for(let j in range(0, width)) {
-        const pixel = this.#_imageParser.getPixel(i, j)
-      }
-      console.log("i: ", i)
+    const src = this.#_imageParser.getUrl()
+    const dest = "./out.png"
+    const caller = `
+      async def main():
+        import micropip
+        await  micropip.install('https://download.lfd.uci.edu/pythonlibs/w4tscw6k/PIL-2.0+dummy-py2.py3-none-any.whl').then(encode_image('${src}', '${this.#_message}', '${dest}'))
+      
+      print("runnin")
+      await main()
+    `
+    const callable = code + caller
+    console.log(callable)
+    const { pyodide } = window
+    try {
+      languageServer.then(() => {
+        return pyodide.loadPackage(['micropip'])
+      }).then(() => {
+        pyodide.runPythonAsync(caller)
+          .then(out => console.log("Output:", out))
+          .catch(err => console.error("Error trace:",err))
+      })
+    } catch (e) {
+      console.error(`Error in python code at ${e.filename}, Line: ${e.lineno}, ${e.message}`)
     }
   }
 
