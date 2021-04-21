@@ -1,5 +1,3 @@
-import fs from 'fs'
-
 // util functions
 
 export const range = (start, end) => {
