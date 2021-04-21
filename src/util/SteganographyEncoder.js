@@ -1,4 +1,3 @@
-import Pixel from './Pixel'
 import { stringToBinary } from './util'
 
 /**
@@ -20,15 +19,9 @@ class SteganographyEncoder {
    * Encode the message
    */
   encode = async () => {
-    const [height, width] = this.#_imageParser.getResolution()
-    const imageData = this.#_imageParser.getPixelArray()
+    const imageData = this.#_imageParser.getPixelBuffer()
     const colorData = imageData.data
-    // console.log("pixels:",pixels)
-    
-    let pixels = []
-
     const messageBin = stringToBinary(this.#_message)
-    console.log("messageBin:",messageBin)
 
     let cursor = 0
     for(let i = 0, j = 0; i < colorData.length; i += 4, j++) {
@@ -36,7 +29,6 @@ class SteganographyEncoder {
         colorData[i], 
         colorData[i + 1], 
         colorData[i + 2], 
-        // colorData[1 + 3]
       ]
 
       if(data[3] % 2 === 0) {
@@ -49,16 +41,10 @@ class SteganographyEncoder {
         }
       }
 
-      console.log('set char: ', messageBin[cursor])
       cursor += 1
-      if(i % 10000 === 0) console.log(pixels)
-      if(cursor >= messageBin.length) {
-        console.log("breaking")
-        break
-      }
+      if(cursor >= messageBin.length) break
     }
-    this.#_imageParser.setPixelArray(imageData)
-    console.log("Done")
+    this.#_imageParser.setPixelBuffer(imageData)
   }
 
   // private

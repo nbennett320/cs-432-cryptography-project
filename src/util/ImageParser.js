@@ -165,9 +165,9 @@ class ImageParser {
 
   /**
    * Get the image as an array of pixels
-   * @returns {Uint8ClampedArray} returns array of pixel data
+   * @returns {CanvasImageData} returns array of pixel data
    */
-   getPixelArray = () => {
+   getPixelBuffer = () => {
     if(this.#_isValidFile && this.#_imageHasLoaded) {
       return this.#_ctx.getImageData(0, 0, this.#_width, this.#_height)
     } else if(!this.#_imageHasLoaded) {
@@ -175,12 +175,13 @@ class ImageParser {
     }
   }
 
-  setPixelArray = pixelData => {
+  /**
+   * Replace modified Pixel Buffer
+   * @param {CanvasImageData} pixelData 
+   */
+  setPixelBuffer = pixelData => {
     if(this.#_isValidFile && this.#_imageHasLoaded) {
-      console.log("set pixel", this.#_canvas)
       this.#_ctx.putImageData(pixelData, 0, 0)
-      // this.#_url = URL.createObjectURL(this.#_canvas)
-
       this.#_canvas[
         this.#_canvas.convertToBlob 
           ? 'convertToBlob' 
