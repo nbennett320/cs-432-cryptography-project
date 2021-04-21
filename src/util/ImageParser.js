@@ -159,9 +159,7 @@ class ImageParser {
         console.error(`Not a valid pixel; (${x}, ${y}) is not in range of (${this.#_width}, ${this.#_height})`)
       }
     } else if(!this.#_imageHasLoaded) {
-
-    } else {
-
+      console.error(`Image has not loaded, call ImageParser.parse() first.`)
     }
   }
 

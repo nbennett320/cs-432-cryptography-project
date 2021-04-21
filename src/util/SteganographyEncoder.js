@@ -1,4 +1,14 @@
 import { range } from './util'
+import languageServer from 'pyodide'
+
+const code = "print('hello world')"
+
+languageServer.then(() => {
+  const { pyodide } = window
+  pyodide.runPythonAsync(code)
+    .then(out => console.log(out))
+    .catch(err => console.warn(err))
+})
 
 /**
  * 
@@ -19,7 +29,6 @@ class SteganographyEncoder {
    * Encode the message
    */
   encode = () => {
-    // const res = this.#_imageParser.getResolution()
     const [height, width] = this.#_imageParser.getResolution()
     for(let i in range(0, height)) {
       for(let j in range(0, width)) {
