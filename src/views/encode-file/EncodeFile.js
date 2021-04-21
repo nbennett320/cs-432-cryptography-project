@@ -26,10 +26,6 @@ const EncodeFile = props => {
     console.log("message: ",message)
   }, [message])
 
-  if(isLoaded) {
-    console.log(props.image.getPixel(0, 0))
-  }
-
   return (
     <div className="view">
       <Card style={styles.card}>

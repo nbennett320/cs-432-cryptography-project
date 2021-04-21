@@ -1,7 +1,5 @@
-import languageServer from 'pyodide'
-import { code } from './python/lsb_encode.py'
-
-// const code = "print('hello world')"
+import Pixel from './Pixel'
+import { stringToBinary } from './util'
 
 /**
  * 
@@ -14,7 +12,6 @@ class SteganographyEncoder {
    * @param {String} message 
    */
   constructor(image, message) {
-    // readCode()
     this.#_imageParser = image
     this.#_message = message
   } 
@@ -23,75 +20,45 @@ class SteganographyEncoder {
    * Encode the message
    */
   encode = async () => {
-    // const [height, width] = this.#_imageParser.getResolution()
-    const src = this.#_imageParser.getUrl()
-    const dest = "./out.png"
-    const caller = `
+    const [height, width] = this.#_imageParser.getResolution()
+    const imageData = this.#_imageParser.getPixelArray()
+    const colorData = imageData.data
+    // console.log("pixels:",pixels)
+    
+    let pixels = []
 
-      async def encode_image(src, message, dest):
-        import numpy as np 
-        from PIL import Image
-        print("ima run")
-        """Encodes an image with a message."""
+    const messageBin = stringToBinary(this.#_message)
+    console.log("messageBin:",messageBin)
 
-        img = Image.open(src, 'r')
-        pixel_array = np.asarray(img).copy()
-        
-        #calculate number of pixels in image
-        if img.mode == 'RGB':
-          num_pixels = pixel_array.size // 3
-        elif img.mode == 'RGBA':
-          num_pixels =  pixel_array.size // 4
+    let cursor = 0
+    for(let i = 0, j = 0; i < colorData.length; i += 4, j++) {
+      let data = [
+        colorData[i], 
+        colorData[i + 1], 
+        colorData[i + 2], 
+        // colorData[1 + 3]
+      ]
 
-        #add delimter to message to endicate end of message
-        message += '#yeet#'
+      if(data[3] % 2 === 0) {
+        if(parseInt(messageBin[cursor]) === 1) {
+          data[3] += 1
+        }
+      } else {
+        if(parseInt(messageBin[cursor]) === 0) {
+          data[3] -= 1
+        }
+      }
 
-        #convert message to binary
-        message = ''.join(format(ord(char), '08b') for char in message)
-
-
-        #are there enough pixels in the img to accomodate the message
-        if len(message) > num_pixels:
-          print("Image to small or message too large. Try again.")
-          return 0
-
-        counter = 0
-        for row in range(len(pixel_array)):
-          for pixel in range(len(pixel_array[row])):
-            for channel in range(len(pixel_array[row][pixel])):
-              if counter < len(message):
-                pixel_array[row][pixel][channel] = int(bin(pixel_array[row][pixel][channel])[2:9] + message[counter], 2)
-                counter += 1
-
-        new_img = Image.fromarray(pixel_array, img.mode)
-        print()
-        new_img.save(dest)
-        print("new image constructed")
-        return new_img
-
-      print("runnin")
-      import micropip
-      micropip.install('https://download.lfd.uci.edu/pythonlibs/w4tscw6k/PIL-2.0+dummy-py2.py3-none-any.whl').then(encode_image('${src}', '${this.#_message}', '${dest}'))
-      # micropip.install('Pillow').then(encode_image('${src}', '${this.#_message}', '${dest}'))
-    `
-    const callable = code + caller
-    console.log(callable)
-    const { pyodide } = window
-    try {
-      languageServer.then(() => {
-        return pyodide.loadPackage(['micropip'])
-      }).then(() => {
-        pyodide.runPythonAsync(caller)
-          .then(out => {
-            console.log("gonna call the second",out)
-            // pyodide.runPythonAsync(`encode_image('${src}', '${this.#_message}', '${dest}')`)
-            
-          })
-          .catch(err => console.error("Error trace:",err))
-      })
-    } catch (e) {
-      console.error(`Error in python code at ${e.filename}, Line: ${e.lineno}, ${e.message}`)
+      console.log('set char: ', messageBin[cursor])
+      cursor += 1
+      if(i % 10000 === 0) console.log(pixels)
+      if(cursor >= messageBin.length) {
+        console.log("breaking")
+        break
+      }
     }
+    this.#_imageParser.setPixelArray(imageData)
+    console.log("Done")
   }
 
   // private
