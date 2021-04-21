@@ -5,14 +5,26 @@ import {
   ButtonGroup
 } from 'react-bootstrap'
 import TextArea from './TextArea'
+import SteganographyEncoder from '../../util/SteganographyEncoder'
+
+const handleEncode = (image, message) => {
+  console.log("Encoding......", image, message)
+  const encoder = new SteganographyEncoder(image, message)
+  encoder.encode()
+}
 
 const EncodeFile = props => {
   const [isLoaded, setLoaded] = React.useState(false)
+  const [message, setMessage] = React.useState("")
   React.useEffect(() => {
     props.image.parse().then(() => {
       setLoaded(true)
     }, [isLoaded])
   })
+
+  React.useEffect(() => {
+    console.log("message: ",message)
+  }, [message])
 
   if(isLoaded) {
     console.log(props.image.getPixel(0, 0))
@@ -41,10 +53,10 @@ const EncodeFile = props => {
             Size: {props.image.getFileSize()}
             <br/>
           </Card.Text>
-          <TextArea />
+          <TextArea setMessage={setMessage} />
           <ButtonGroup>
             <Button
-              onClick={() => {props.setView('encode-file')}}
+              onClick={() => handleEncode(props.image, message)}
               variant="outline-primary"
             >
               Encode

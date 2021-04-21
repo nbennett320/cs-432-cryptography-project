@@ -22,7 +22,7 @@ class Pixel {
    * Object containing RGBA values of a pixel color
    * @property {Object} rgba
    */
-  rgba = { 
+  rgba = {
     r: undefined, 
     g: undefined, 
     b: undefined, 

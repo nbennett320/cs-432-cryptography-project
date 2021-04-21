@@ -84,6 +84,16 @@ class ImageParser {
   }
 
   /**
+   * Return height and width
+   * @returns {Array} [height, width]
+   */
+  getResolution = () => {
+    if(this.#_isValidFile) {
+      return [this.#_height, this.#_width]
+    }
+  }
+
+  /**
    * Get the name of the uploaded file
    * @returns {String} filename
    */
