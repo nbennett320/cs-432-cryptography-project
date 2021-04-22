@@ -1,14 +1,4 @@
-import { range } from './util'
-import languageServer from 'pyodide'
-
-const code = "print('hello world')"
-
-languageServer.then(() => {
-  const { pyodide } = window
-  pyodide.runPythonAsync(code)
-    .then(out => console.log(out))
-    .catch(err => console.warn(err))
-})
+import { stringToBinary } from './util'
 
 /**
  * 
@@ -28,14 +18,37 @@ class SteganographyEncoder {
   /**
    * Encode the message
    */
-  encode = () => {
-    const [height, width] = this.#_imageParser.getResolution()
-    for(let i in range(0, height)) {
-      for(let j in range(0, width)) {
-        const pixel = this.#_imageParser.getPixel(i, j)
+  encode = async () => {
+    return new Promise(res => {
+      const imageData = this.#_imageParser.getPixelBuffer()
+      const colorData = imageData.data
+      const messageBin = stringToBinary(this.#_message)
+  
+      let cursor = 0
+      for(let i = 0, j = 0; i < colorData.length; i += 4, j++) {
+        let data = [
+          colorData[i], 
+          colorData[i + 1], 
+          colorData[i + 2], 
+        ]
+  
+        if(data[3] % 2 === 0) {
+          if(parseInt(messageBin[cursor]) === 1) {
+            data[3] += 1
+          }
+        } else {
+          if(parseInt(messageBin[cursor]) === 0) {
+            data[3] -= 1
+          }
+        }
+  
+        cursor += 1
+        if(cursor >= messageBin.length) break
       }
-      console.log("i: ", i)
-    }
+      this.#_imageParser.setPixelBuffer(imageData).then(url => {
+        res(url)
+      })
+    })
   }
 
   // private

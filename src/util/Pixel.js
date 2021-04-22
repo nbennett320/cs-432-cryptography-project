@@ -8,14 +8,16 @@ class Pixel {
    * @param {Object} data object containing rgba values
    */
   constructor(data) {
-    this.rgba.r = data[0]
-    this.rgba.g = data[1]
-    this.rgba.b = data[2]
-    this.rgba.a = data[3] / 255
-    const hexR = this.#_dec2HexCSubstr(data[0])
-    const hexG = this.#_dec2HexCSubstr(data[1])
-    const hexB = this.#_dec2HexCSubstr(data[2])
-    this.hex = '#' + hexR + hexG + hexB
+    if(data) {
+      this.rgba.r = data[0]
+      this.rgba.g = data[1]
+      this.rgba.b = data[2]
+      this.rgba.a = data[3] / 255
+      const hexR = this.#_dec2HexCSubstr(data[0])
+      const hexG = this.#_dec2HexCSubstr(data[1])
+      const hexB = this.#_dec2HexCSubstr(data[2])
+      this.hex = '#' + hexR + hexG + hexB
+    }
   }
 
   /**
@@ -34,6 +36,21 @@ class Pixel {
    * @member {String} hex
    */
   hex = ""
+
+  toPixel = data => {
+    this.rgba.r = data[0]
+    this.rgba.g = data[1]
+    this.rgba.b = data[2]
+    this.rgba.a = data[3] / 255
+    const hexR = this.#_dec2HexCSubstr(data[0])
+    const hexG = this.#_dec2HexCSubstr(data[1])
+    const hexB = this.#_dec2HexCSubstr(data[2])
+    this.hex = '#' + hexR + hexG + hexB
+    return {
+      rgba: this.rgba,
+      hex: this.hex
+    }
+  }
 
   // private
 

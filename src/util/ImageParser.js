@@ -164,6 +164,41 @@ class ImageParser {
   }
 
   /**
+   * Get the image as an array of pixels
+   * @returns {CanvasImageData} returns array of pixel data
+   */
+   getPixelBuffer = () => {
+    if(this.#_isValidFile && this.#_imageHasLoaded) {
+      return this.#_ctx.getImageData(0, 0, this.#_width, this.#_height)
+    } else if(!this.#_imageHasLoaded) {
+      console.error(`Image has not loaded, call ImageParser.parse() first.`)
+    }
+  }
+
+  /**
+   * Replace modified Pixel Buffer
+   * @param {CanvasImageData} pixelData 
+   */
+  setPixelBuffer = async pixelData => {
+    return new Promise(res => {
+      if(this.#_isValidFile && this.#_imageHasLoaded) {
+        this.#_ctx.putImageData(pixelData, 0, 0)
+        this.#_canvas[
+          this.#_canvas.convertToBlob 
+            ? 'convertToBlob' 
+            : 'toBlob'
+        ]().then(blob => {
+          this.#_url = URL.createObjectURL(blob)
+          res(this.#_url)
+          console.log("new url set (parser)", this.#_url)
+          })
+      } else if(!this.#_imageHasLoaded) {
+        console.error(`Image has not loaded, call ImageParser.parse() first.`)
+      }
+    })
+  }
+
+  /**
    * Returns offscreen canvas object
    * @returns {HTMLCanvasElement} canvas object
    */
