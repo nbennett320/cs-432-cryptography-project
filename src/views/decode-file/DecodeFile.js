@@ -9,10 +9,13 @@ import SteganographyDecoder from '../../util/SteganographyDecoder'
 
 const DecodeFile = props => {
   const [mode, setMode] = React.useState('default')
+  const [message, setMessage] = React.useState()
 
   const handleDecode = async (image) => {
     const decoder = new SteganographyDecoder(image)
-    await decoder.decode().then(url => {
+    await decoder.decode().then(msg => {
+      console.log('recieved:',msg)
+      setMessage(msg)
       setMode('has-decoded')
     })
   }
