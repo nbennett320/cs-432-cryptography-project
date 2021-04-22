@@ -8,13 +8,7 @@ import { ImageDetails } from '../../components'
 import SteganographyDecoder from '../../util/SteganographyDecoder'
 
 const DecodeFile = props => {
-  const [isLoaded, setLoaded] = React.useState(false)
   const [mode, setMode] = React.useState('default')
-  React.useEffect(() => {
-    props.image.parse().then(() => {
-      setLoaded(true)
-    }, [isLoaded])
-  })
 
   const handleDecode = async (image) => {
     const decoder = new SteganographyDecoder(image)
@@ -36,15 +30,14 @@ const DecodeFile = props => {
           variant="top"
         />
         <Card.Body>
-          <Card.Title>Filename: {props.image.getName()}</Card.Title>
           <ImageDetails image={props.image}>
-            {mode === 'has-decodecoded' && <span>
+            {mode === 'has-decoded' && <span>
+            <b style={styles.bold}>Message decoded!</b> Click the button below to copy the message to your clipboard.
+            </span>}
           </ImageDetails>
-          <b style={styles.bold}>Message decoded!</b> Click the button below to copy the message to your clipboard.
-          </span>}
           {mode === 'default' && <ButtonGroup>
             <Button
-              onClick={() => handleDecode(props.image, message)}
+              onClick={() => handleDecode(props.image)}
               variant="outline-primary"
             >
               Decode
@@ -58,7 +51,7 @@ const DecodeFile = props => {
           </ButtonGroup>}
           {mode === 'has-decoded' && <ButtonGroup>
             <Button
-              onClick={() => handleDownload()}
+              onClick={() => {/*handleDownload()*/}}
               variant="outline-primary"
             >
               Download file

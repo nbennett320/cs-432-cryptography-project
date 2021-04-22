@@ -67,7 +67,6 @@ class ImageParser {
    */
   getHeight = () => {
     if(this.#_isValidFile) {
-      console.log(this.#_height)
       return this.#_height
     }
   }
@@ -78,7 +77,6 @@ class ImageParser {
    */
   getWidth = () => {
     if(this.#_isValidFile) {
-      console.log(this.#_width)
       return this.#_width
     }
   }

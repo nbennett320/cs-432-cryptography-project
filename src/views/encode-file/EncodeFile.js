@@ -9,16 +9,10 @@ import TextArea from './TextArea'
 import SteganographyEncoder from '../../util/SteganographyEncoder'
 
 const EncodeFile = props => {
-  const [isLoaded, setLoaded] = React.useState(false)
   const [message, setMessage] = React.useState("")
   const [src, setSrc] = React.useState(props.image.getUrl())
   const [mode, setMode] = React.useState('default')
-  React.useEffect(() => {
-    props.image.parse().then(() => {
-      setLoaded(true)
-    }, [isLoaded])
-  })
-
+  
   const handleEncode = async (image, message) => {
     const encoder = new SteganographyEncoder(image, message)
     await encoder.encode().then(url => {
@@ -49,20 +43,11 @@ const EncodeFile = props => {
           variant="top"
         />
         <Card.Body>
-          <Card.Title>Filename: {props.image.getName()}</Card.Title>
-          {/* <Card.Text>
-            Image resolution: {props.image.getHeight()} &times; 
-            {props.image.getWidth()} pixels
-            <br/>
-            File type: {props.image.getFileType()}
-            <br/>
-            Size: {props.image.getFileSize()}
-            <br/>
+          <ImageDetails image={props.image}>
             {mode === 'has-encoded' && <span>
               <b style={styles.bold}>Message encoded!</b> Click the button below to download your steganographic photo.
             </span>}
-          </Card.Text> */}
-          <ImageDetails image={props.image} />
+          </ImageDetails>
           <TextArea setMessage={setMessage} />
           {mode === 'default' && <ButtonGroup>
             <Button

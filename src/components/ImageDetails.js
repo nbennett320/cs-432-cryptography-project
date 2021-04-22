@@ -4,6 +4,7 @@ import { Card } from 'react-bootstrap'
 const ImageDetails = props => {
   return(
     <>
+      <Card.Title>Filename: {props.image.getName()}</Card.Title>
       <Card.Text>
         Image resolution: {props.image.getHeight()} &times; 
         {props.image.getWidth()} pixels
@@ -12,6 +13,7 @@ const ImageDetails = props => {
         <br/>
         Size: {props.image.getFileSize()}
         <br/>
+        {/* append any children */}
         {props.children}
       </Card.Text>
     </>

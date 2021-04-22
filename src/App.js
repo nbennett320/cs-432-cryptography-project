@@ -3,7 +3,8 @@ import { NavigationBar } from './components'
 import { 
   UploadFile,
   FileOptions,
-  EncodeFile
+  EncodeFile,
+  DecodeFile
 } from './views'
 import ImageParser from './util/ImageParser'
 import './styles/App.css'
@@ -35,7 +36,10 @@ const App = () => {
         setView={setView} 
         image={imageParser}
       />}
-      {/* {view === 'decode-file' && <UploadFile {...props} />} */}
+      {view === 'decode-file' && <DecodeFile 
+        setView={setView} 
+        image={imageParser}
+      />}
       {!view && <UploadFile 
         setView={setView} 
         image={imageParser}
