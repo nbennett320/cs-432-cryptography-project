@@ -7,7 +7,7 @@ import {
 
 const NavigationBar = props => {
   return(
-    <Navbar expand="lg" bg="light">
+    <Navbar expand="lg" bg="light" style={styles.navbar}>
       <Navbar.Brand href="/">
         CS 432 Cryptography Project
       </Navbar.Brand>
@@ -17,6 +17,12 @@ const NavigationBar = props => {
       </Nav>
     </Navbar>
   )
+}
+
+const styles = {
+  navbar: {
+    backgroundColor: '#f8f9fa'
+  }
 }
 
 export default NavigationBar

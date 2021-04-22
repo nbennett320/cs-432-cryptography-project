@@ -55,8 +55,6 @@ class SteganographyDecoder {
 
   // private
   
-  #_isValidLength = () => {}
-
   #_imageParser
 
 }

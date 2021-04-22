@@ -5,6 +5,7 @@ import {
   ButtonGroup
 } from 'react-bootstrap'
 import { ImageDetails } from '../../components'
+import DecodedTextSection from './DecodedTextSection'
 import SteganographyDecoder from '../../util/SteganographyDecoder'
 
 const DecodeFile = props => {
@@ -38,6 +39,7 @@ const DecodeFile = props => {
             <b style={styles.bold}>Message decoded!</b> Click the button below to copy the message to your clipboard.
             </span>}
           </ImageDetails>
+          {mode === 'has-decoded' && <DecodedTextSection message={message} />}
           {mode === 'default' && <ButtonGroup>
             <Button
               onClick={() => handleDecode(props.image)}
