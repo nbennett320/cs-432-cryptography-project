@@ -5,31 +5,21 @@ import {
   ButtonGroup
 } from 'react-bootstrap'
 import { ImageDetails } from '../../components'
-import TextArea from './TextArea'
-import SteganographyEncoder from '../../util/SteganographyEncoder'
+import SteganographyDecoder from '../../util/SteganographyDecoder'
 
-const EncodeFile = props => {
-  const [message, setMessage] = React.useState("")
-  const [src, setSrc] = React.useState(props.image.getUrl())
+const DecodeFile = props => {
   const [mode, setMode] = React.useState('default')
-  
-  const handleEncode = async (image, message) => {
-    const encoder = new SteganographyEncoder(image, message)
-    await encoder.encode().then(url => {
-      setSrc(url)
-      console.log("renewed url:", url)
-      console.log("renewed src:", src)
-      setMode('has-encoded')
+  const [message, setMessage] = React.useState()
+
+  const handleDecode = async (image) => {
+    const decoder = new SteganographyDecoder(image)
+    await decoder.decode().then(msg => {
+      console.log('recieved:',msg)
+      setMessage(msg)
+      setMode('has-decoded')
     })
   }
 
-  const handleDownload = () => {
-    const anchor = document.createElement('a')
-    anchor.download = `encoded_${props.image.getName()}`
-    anchor.href = src
-    anchor.click()
-  }
-  
   return (
     <div className="view">
       <Card style={styles.card}>
@@ -38,23 +28,22 @@ const EncodeFile = props => {
             "expand-transition", 
             "image-preview image-preview--expanded"
           ]}
-          src={src}
+          src={props.image.getUrl()}
           style={styles.cardImg}
           variant="top"
         />
         <Card.Body>
           <ImageDetails image={props.image}>
-            {mode === 'has-encoded' && <span>
-              <b style={styles.bold}>Message encoded!</b> Click the button below to download your steganographic photo.
+            {mode === 'has-decoded' && <span>
+            <b style={styles.bold}>Message decoded!</b> Click the button below to copy the message to your clipboard.
             </span>}
           </ImageDetails>
-          <TextArea setMessage={setMessage} />
           {mode === 'default' && <ButtonGroup>
             <Button
-              onClick={() => handleEncode(props.image, message)}
+              onClick={() => handleDecode(props.image)}
               variant="outline-primary"
             >
-              Encode
+              Decode
             </Button>
             <Button
               onClick={() => {}}
@@ -63,9 +52,9 @@ const EncodeFile = props => {
               Back
             </Button>
           </ButtonGroup>}
-          {mode === 'has-encoded' && <ButtonGroup>
+          {mode === 'has-decoded' && <ButtonGroup>
             <Button
-              onClick={() => handleDownload()}
+              onClick={() => {/*handleDownload()*/}}
               variant="outline-primary"
             >
               Download file
@@ -100,4 +89,4 @@ const styles = {
   }
 }
 
-export default EncodeFile
+export default DecodeFile

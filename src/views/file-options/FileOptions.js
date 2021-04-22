@@ -7,9 +7,15 @@ import {
 import '../../styles/transitions.css'
 
 const ImageOptions = props => {
+  const [isLoaded, setLoaded] = React.useState(false)
   const [fullImage, setFullImage] = React.useState(false)
-  // console.log(props.image)
-  // console.log(props)
+  
+  React.useEffect(() => {
+    props.image.parse().then(() => {
+      setLoaded(true)
+    }, [isLoaded])
+  })
+
   return (
     <div className="view">
       <Card style={styles.card}>
@@ -25,7 +31,13 @@ const ImageOptions = props => {
         <Card.Body>
           <Card.Title>Filename: {props.image.getName()}</Card.Title>
           <Card.Text>
-            Image options
+            Image resolution: {props.image.getHeight()} &times; 
+            {props.image.getWidth()} pixels
+            <br/>
+            File type: {props.image.getFileType()}
+            <br/>
+            Size: {props.image.getFileSize()}
+            <br/>
           </Card.Text>
           <ButtonGroup>
             <Button
@@ -35,7 +47,7 @@ const ImageOptions = props => {
               Encode a message
             </Button>
             <Button
-              onClick={() => {}}
+              onClick={() => {props.setView('decode-file')}}
               variant="outline-primary"
             >
               Decode from media
