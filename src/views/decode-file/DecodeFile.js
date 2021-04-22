@@ -5,13 +5,10 @@ import {
   ButtonGroup
 } from 'react-bootstrap'
 import { ImageDetails } from '../../components'
-import TextArea from './TextArea'
-import SteganographyEncoder from '../../util/SteganographyEncoder'
+import SteganographyDecoder from '../../util/SteganographyDecoder'
 
-const EncodeFile = props => {
+const DecodeFile = props => {
   const [isLoaded, setLoaded] = React.useState(false)
-  const [message, setMessage] = React.useState("")
-  const [src, setSrc] = React.useState(props.image.getUrl())
   const [mode, setMode] = React.useState('default')
   React.useEffect(() => {
     props.image.parse().then(() => {
@@ -19,23 +16,13 @@ const EncodeFile = props => {
     }, [isLoaded])
   })
 
-  const handleEncode = async (image, message) => {
-    const encoder = new SteganographyEncoder(image, message)
-    await encoder.encode().then(url => {
-      setSrc(url)
-      console.log("renewed url:", url)
-      console.log("renewed src:", src)
-      setMode('has-encoded')
+  const handleDecode = async (image) => {
+    const decoder = new SteganographyDecoder(image)
+    await decoder.decode().then(url => {
+      setMode('has-decoded')
     })
   }
 
-  const handleDownload = () => {
-    const anchor = document.createElement('a')
-    anchor.download = `encoded_${props.image.getName()}`
-    anchor.href = src
-    anchor.click()
-  }
-  
   return (
     <div className="view">
       <Card style={styles.card}>
@@ -44,32 +31,23 @@ const EncodeFile = props => {
             "expand-transition", 
             "image-preview image-preview--expanded"
           ]}
-          src={src}
+          src={props.image.getUrl()}
           style={styles.cardImg}
           variant="top"
         />
         <Card.Body>
           <Card.Title>Filename: {props.image.getName()}</Card.Title>
-          {/* <Card.Text>
-            Image resolution: {props.image.getHeight()} &times; 
-            {props.image.getWidth()} pixels
-            <br/>
-            File type: {props.image.getFileType()}
-            <br/>
-            Size: {props.image.getFileSize()}
-            <br/>
-            {mode === 'has-encoded' && <span>
-              <b style={styles.bold}>Message encoded!</b> Click the button below to download your steganographic photo.
-            </span>}
-          </Card.Text> */}
-          <ImageDetails image={props.image} />
-          <TextArea setMessage={setMessage} />
+          <ImageDetails image={props.image}>
+            {mode === 'has-decodecoded' && <span>
+          </ImageDetails>
+          <b style={styles.bold}>Message decoded!</b> Click the button below to copy the message to your clipboard.
+          </span>}
           {mode === 'default' && <ButtonGroup>
             <Button
-              onClick={() => handleEncode(props.image, message)}
+              onClick={() => handleDecode(props.image, message)}
               variant="outline-primary"
             >
-              Encode
+              Decode
             </Button>
             <Button
               onClick={() => {}}
@@ -78,7 +56,7 @@ const EncodeFile = props => {
               Back
             </Button>
           </ButtonGroup>}
-          {mode === 'has-encoded' && <ButtonGroup>
+          {mode === 'has-decoded' && <ButtonGroup>
             <Button
               onClick={() => handleDownload()}
               variant="outline-primary"
@@ -115,4 +93,4 @@ const styles = {
   }
 }
 
-export default EncodeFile
+export default DecodeFile

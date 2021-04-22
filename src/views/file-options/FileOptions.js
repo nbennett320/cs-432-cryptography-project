@@ -25,7 +25,13 @@ const ImageOptions = props => {
         <Card.Body>
           <Card.Title>Filename: {props.image.getName()}</Card.Title>
           <Card.Text>
-            Image options
+            Image resolution: {props.image.getHeight()} &times; 
+            {props.image.getWidth()} pixels
+            <br/>
+            File type: {props.image.getFileType()}
+            <br/>
+            Size: {props.image.getFileSize()}
+            <br/>
           </Card.Text>
           <ButtonGroup>
             <Button
