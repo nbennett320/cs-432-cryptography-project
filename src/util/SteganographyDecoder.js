@@ -38,9 +38,8 @@ class SteganographyDecoder {
           if(isAscii(ch)) {
             message += ch
             charBin = ""
-            console.log("message", message)
           } else {
-            console.warn("Non-Ascii char found: ", ch)
+            console.warn(`Non-Ascii char found: 0b${charBin}`)
             break
           }
         } else {
@@ -48,15 +47,12 @@ class SteganographyDecoder {
         }
         cursor += 1
       }
-      console.log("Done")
-      return res(message)
+      return res(message.trim())
     })
   }
 
   // private
   
-  #_isValidLength = () => {}
-
   #_imageParser
 
 }

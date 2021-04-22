@@ -2,14 +2,17 @@ import React from 'react'
 import { 
   Card, 
   Button,
-  ButtonGroup
+  ButtonGroup,
+  Alert
 } from 'react-bootstrap'
 import { ImageDetails } from '../../components'
+import DecodedTextSection from './DecodedTextSection'
 import SteganographyDecoder from '../../util/SteganographyDecoder'
 
 const DecodeFile = props => {
   const [mode, setMode] = React.useState('default')
   const [message, setMessage] = React.useState()
+  const [showAlert, setShowAlert] = React.useState(false)
 
   const handleDecode = async (image) => {
     const decoder = new SteganographyDecoder(image)
@@ -17,6 +20,15 @@ const DecodeFile = props => {
       console.log('recieved:',msg)
       setMessage(msg)
       setMode('has-decoded')
+    })
+  }
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(message).then(() => {
+      setShowAlert(true)
+      setTimeout(() => {
+        setShowAlert(false)
+      }, 6000)
     })
   }
 
@@ -38,6 +50,15 @@ const DecodeFile = props => {
             <b style={styles.bold}>Message decoded!</b> Click the button below to copy the message to your clipboard.
             </span>}
           </ImageDetails>
+          {mode === 'has-decoded' && <DecodedTextSection message={message} />}
+          <Alert 
+            show={showAlert}
+            variant="primary"
+            onClick={() => setShowAlert(false)}
+            style={styles.alert}
+          >
+            Copied to clipboard!
+          </Alert>
           {mode === 'default' && <ButtonGroup>
             <Button
               onClick={() => handleDecode(props.image)}
@@ -54,10 +75,10 @@ const DecodeFile = props => {
           </ButtonGroup>}
           {mode === 'has-decoded' && <ButtonGroup>
             <Button
-              onClick={() => {/*handleDownload()*/}}
+              onClick={() => {handleCopy()}}
               variant="outline-primary"
             >
-              Download file
+              Copy to clipboard
             </Button>
             <Button
               onClick={() => {}}
@@ -86,6 +107,9 @@ const styles = {
   },
   bold: {
     fontWeight: '500'
+  },
+  alert: {
+    cursor: 'pointer'
   }
 }
 
