@@ -28,7 +28,7 @@ const DecodeFile = props => {
       setShowAlert(true)
       setTimeout(() => {
         setShowAlert(false)
-      }, 5000)
+      }, 6000)
     })
   }
 
@@ -54,6 +54,8 @@ const DecodeFile = props => {
           <Alert 
             show={showAlert}
             variant="primary"
+            onClick={() => setShowAlert(false)}
+            style={styles.alert}
           >
             Copied to clipboard!
           </Alert>
@@ -105,6 +107,9 @@ const styles = {
   },
   bold: {
     fontWeight: '500'
+  },
+  alert: {
+    cursor: 'pointer'
   }
 }
 

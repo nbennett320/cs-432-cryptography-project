@@ -47,7 +47,7 @@ class SteganographyDecoder {
         }
         cursor += 1
       }
-      return res(message)
+      return res(message.trim())
     })
   }
 
