@@ -179,19 +179,23 @@ class ImageParser {
    * Replace modified Pixel Buffer
    * @param {CanvasImageData} pixelData 
    */
-  setPixelBuffer = pixelData => {
-    if(this.#_isValidFile && this.#_imageHasLoaded) {
-      this.#_ctx.putImageData(pixelData, 0, 0)
-      this.#_canvas[
-        this.#_canvas.convertToBlob 
-          ? 'convertToBlob' 
-          : 'toBlob'
-      ]().then(blob => {
+  setPixelBuffer = async pixelData => {
+    return new Promise(res => {
+      if(this.#_isValidFile && this.#_imageHasLoaded) {
+        this.#_ctx.putImageData(pixelData, 0, 0)
+        this.#_canvas[
+          this.#_canvas.convertToBlob 
+            ? 'convertToBlob' 
+            : 'toBlob'
+        ]().then(blob => {
           this.#_url = URL.createObjectURL(blob)
-        })
-    } else if(!this.#_imageHasLoaded) {
-      console.error(`Image has not loaded, call ImageParser.parse() first.`)
-    }
+          res(this.#_url)
+          console.log("new url set (parser)", this.#_url)
+          })
+      } else if(!this.#_imageHasLoaded) {
+        console.error(`Image has not loaded, call ImageParser.parse() first.`)
+      }
+    })
   }
 
   /**

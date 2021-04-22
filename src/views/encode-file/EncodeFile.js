@@ -7,24 +7,26 @@ import {
 import TextArea from './TextArea'
 import SteganographyEncoder from '../../util/SteganographyEncoder'
 
-const handleEncode = (image, message) => {
-  console.log("Encoding......", image, message)
-  const encoder = new SteganographyEncoder(image, message)
-  encoder.encode()
-}
-
 const EncodeFile = props => {
   const [isLoaded, setLoaded] = React.useState(false)
   const [message, setMessage] = React.useState("")
+  const [src, setSrc] = React.useState(props.image.getUrl())
+  const [mode, setMode] = React.useState('default')
   React.useEffect(() => {
     props.image.parse().then(() => {
       setLoaded(true)
     }, [isLoaded])
   })
 
-  React.useEffect(() => {
-    console.log("message: ",message)
-  }, [message])
+  const handleEncode = async (image, message) => {
+    const encoder = new SteganographyEncoder(image, message)
+    await encoder.encode().then(url => {
+      setSrc(url)
+      console.log("renewed url:", url)
+      console.log("renewed src:", src)
+      setMode('has-encoded')
+    })
+  }
 
   return (
     <div className="view">
@@ -34,7 +36,7 @@ const EncodeFile = props => {
             "expand-transition", 
             "image-preview image-preview--expanded"
           ]}
-          src={props.image.getUrl()}
+          src={src}
           style={styles.cardImg}
           variant="top"
         />
@@ -48,9 +50,12 @@ const EncodeFile = props => {
             <br/>
             Size: {props.image.getFileSize()}
             <br/>
+            {mode === 'has-encoded' && <span>
+              <b style={styles.bold}>Message encoded!</b> Click the button below to download your steganographic photo.
+            </span>}
           </Card.Text>
           <TextArea setMessage={setMessage} />
-          <ButtonGroup>
+          {mode === 'default' && <ButtonGroup>
             <Button
               onClick={() => handleEncode(props.image, message)}
               variant="outline-primary"
@@ -63,7 +68,21 @@ const EncodeFile = props => {
             >
               Back
             </Button>
-          </ButtonGroup>
+          </ButtonGroup>}
+          {mode === 'has-encoded' && <ButtonGroup>
+            <Button
+              onClick={() => {}}
+              variant="outline-primary"
+            >
+              Download file
+            </Button>
+            <Button
+              onClick={() => {}}
+              variant="outline-secondary"
+            >
+              Back
+            </Button>
+          </ButtonGroup>}
         </Card.Body>
       </Card>
     </div>
@@ -81,6 +100,9 @@ const styles = {
     alignSelf: 'center',
     objectFit: 'cover',
     overflow: 'hidden',
+  },
+  bold: {
+    fontWeight: '500'
   }
 }
 
