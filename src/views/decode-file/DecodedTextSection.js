@@ -17,7 +17,7 @@ const styles = {
     backgroundColor: '#f8f9fa'
   },
   code: {
-    backgroundColor: '#f8f9fa !important'
+    backgroundColor: '#f8f9fa'
   }
 }
 
