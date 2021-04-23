@@ -5,7 +5,10 @@ import {
   ButtonGroup,
   Alert
 } from 'react-bootstrap'
-import { ImageDetails } from '../../components'
+import { 
+  ImageDetails,
+  RgbaButtonGroup 
+} from '../../components'
 import DecodedTextSection from './DecodedTextSection'
 import SteganographyDecoder from '../../util/SteganographyDecoder'
 
@@ -13,9 +16,10 @@ const DecodeFile = props => {
   const [mode, setMode] = React.useState('default')
   const [message, setMessage] = React.useState()
   const [showAlert, setShowAlert] = React.useState(false)
+  const [checked, setChecked] = React.useState('red')
 
   const handleDecode = async (image) => {
-    const decoder = new SteganographyDecoder(image)
+    const decoder = new SteganographyDecoder(image, checked)
     await decoder.decode().then(msg => {
       console.log('recieved:',msg)
       setMessage(msg)
@@ -59,6 +63,11 @@ const DecodeFile = props => {
           >
             Copied to clipboard!
           </Alert>
+          {mode === 'default' && <RgbaButtonGroup 
+            checked={checked}
+            handleChecked={setChecked}
+            showAlpha={props.image.getFileType()}
+          />}
           {mode === 'default' && <ButtonGroup>
             <Button
               onClick={() => handleDecode(props.image)}

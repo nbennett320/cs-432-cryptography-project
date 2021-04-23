@@ -4,9 +4,12 @@ import { Card } from 'react-bootstrap'
 const DecodedTextSection = props => {
   return (
     <Card.Text style={styles.container}>
-      <code style={styles.code}>
+      {props.message.length > 0 && <code style={styles.code}>
         {props.message}
-      </code>
+      </code>}
+      {props.message.length === 0 && <span style={styles.code}>
+        No parsable ascii-encoded messages were found.
+      </span>}
     </Card.Text>
   )
 }

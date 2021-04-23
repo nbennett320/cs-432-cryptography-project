@@ -4,7 +4,10 @@ import {
   Button,
   ButtonGroup
 } from 'react-bootstrap'
-import { ImageDetails } from '../../components'
+import { 
+  ImageDetails,
+  RgbaButtonGroup 
+} from '../../components'
 import TextArea from './TextArea'
 import SteganographyEncoder from '../../util/SteganographyEncoder'
 
@@ -12,6 +15,7 @@ const EncodeFile = props => {
   const [message, setMessage] = React.useState("")
   const [src, setSrc] = React.useState(props.image.getUrl())
   const [mode, setMode] = React.useState('default')
+  const [checked, setChecked] = React.useState('red')
   
   const handleEncode = async (image, message) => {
     const encoder = new SteganographyEncoder(image, message)
@@ -49,6 +53,11 @@ const EncodeFile = props => {
             </span>}
           </ImageDetails>
           <TextArea setMessage={setMessage} />
+          {mode === 'default' && <RgbaButtonGroup 
+            checked={checked}
+            handleChecked={setChecked}
+            showAlpha={props.image.getFileType()}
+          />}
           {mode === 'default' && <ButtonGroup>
             <Button
               onClick={() => handleEncode(props.image, message)}
