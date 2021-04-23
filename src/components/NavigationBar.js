@@ -2,17 +2,16 @@ import React from 'react'
 import { 
   Navbar, 
   Nav, 
-  // NavDropdown, 
 } from 'react-bootstrap'
 
-const NavigationBar = props => {
+const NavigationBar = () => {
   return(
     <Navbar expand="lg" bg="light" style={styles.navbar}>
       <Navbar.Brand href="/">
         CS 432 Cryptography Project
       </Navbar.Brand>
       <Nav className="mr-auto">
-        <Nav.Link onClick={props.navigateHome}>Home</Nav.Link>
+        <Nav.Link onClick={() => window.location.reload()}>Home</Nav.Link>
         <Nav.Link href="https://github.com/nbennett320/cs-432-cryptography-project">About</Nav.Link>
       </Nav>
     </Navbar>

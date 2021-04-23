@@ -16,7 +16,7 @@ class SteganographyEncoder {
     if(channel) {
       this.#_channel = channel
     } else {
-      channel = 'blue'
+      channel = 'red'
     }
     this.#_channelIndex = this.#_mapChannelToIndex()
   } 

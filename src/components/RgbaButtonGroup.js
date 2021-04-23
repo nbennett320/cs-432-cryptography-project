@@ -11,8 +11,8 @@ const RgbaButtonGroup = props => {
         <ToggleButton
           checked={props.checked === 'red'}
           onChange={() => props.handleChecked('red')}
-          color='red'
           type='radio'
+          variant='danger'
         >
           Red
         </ToggleButton>
@@ -20,6 +20,7 @@ const RgbaButtonGroup = props => {
           checked={props.checked === 'green'}
           onChange={() => props.handleChecked('green')}
           type='radio'
+          variant='success'
         >
           Green
         </ToggleButton>
@@ -27,6 +28,7 @@ const RgbaButtonGroup = props => {
           checked={props.checked === 'blue'}
           onChange={() => props.handleChecked('blue')}
           type='radio'
+          variant='primary'
         >
           Blue
         </ToggleButton>
@@ -34,6 +36,7 @@ const RgbaButtonGroup = props => {
           checked={props.checked === 'alpha'}
           onChange={() => props.handleChecked('alpha')}
           type='radio'
+          variant='secondary'
         >
           Alpha
         </ToggleButton>}
@@ -44,7 +47,8 @@ const RgbaButtonGroup = props => {
 
 const styles = {
   container: {
-    padding: '4px'
+    padding: '8px 0',
+    paddingBottom: '12px'
   }
 }
 

@@ -7,9 +7,9 @@ const DecodedTextSection = props => {
       {props.message.length > 0 && <code style={styles.code}>
         {props.message}
       </code>}
-      {props.message.length === 0 && <span style={styles.code}>
-        No parsable ascii-encoded messages were found.
-      </span>}
+      {props.message.length === 0 && <code style={styles.code}>
+        
+      </code>}
     </Card.Text>
   )
 }

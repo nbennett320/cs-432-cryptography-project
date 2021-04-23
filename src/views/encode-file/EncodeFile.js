@@ -18,7 +18,7 @@ const EncodeFile = props => {
   const [checked, setChecked] = React.useState('red')
   
   const handleEncode = async (image, message) => {
-    const encoder = new SteganographyEncoder(image, message)
+    const encoder = new SteganographyEncoder(image, message, checked)
     await encoder.encode().then(url => {
       setSrc(url)
       console.log("renewed url:", url)
@@ -56,7 +56,7 @@ const EncodeFile = props => {
           {mode === 'default' && <RgbaButtonGroup 
             checked={checked}
             handleChecked={setChecked}
-            showAlpha={props.image.getFileType()}
+            showAlpha={props.image.getFileType() === 'png'}
           />}
           {mode === 'default' && <ButtonGroup>
             <Button
@@ -66,7 +66,7 @@ const EncodeFile = props => {
               Encode
             </Button>
             <Button
-              onClick={() => {}}
+              onClick={() => {props.setView('file-options')}}
               variant="outline-secondary"
             >
               Back
@@ -80,7 +80,7 @@ const EncodeFile = props => {
               Download file
             </Button>
             <Button
-              onClick={() => {}}
+              onClick={() => {setMode('default')}}
               variant="outline-secondary"
             >
               Back

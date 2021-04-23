@@ -58,12 +58,12 @@ const ImageOptions = props => {
             >
               { fullImage ? 'Hide' : 'Show' } Full Image
             </Button>
-            {/* <Button
-              onClick={() => {}}
+            <Button
+              onClick={() => window.location.reload()}
               variant="outline-primary"
             >
-              Restart
-            </Button> */}
+              Back
+            </Button>
           </ButtonGroup>
         </Card.Body>
       </Card>

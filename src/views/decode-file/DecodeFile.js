@@ -50,8 +50,11 @@ const DecodeFile = props => {
         />
         <Card.Body>
           <ImageDetails image={props.image}>
-            {mode === 'has-decoded' && <span>
-            <b style={styles.bold}>Message decoded!</b> Click the button below to copy the message to your clipboard.
+            {(mode === 'has-decoded') && (message.length > 0) && <span>
+              <b style={styles.bold}>Message decoded!</b> Click the button below to copy the message to your clipboard.
+            </span>}
+            {(mode === 'has-decoded') && (message.length === 0) && <span>
+              <b style={styles.bold}>No parsable ascii-encoded messages were found...</b> <br />Maybe try another decoding with a different RGBA channel?
             </span>}
           </ImageDetails>
           {mode === 'has-decoded' && <DecodedTextSection message={message} />}
@@ -66,7 +69,7 @@ const DecodeFile = props => {
           {mode === 'default' && <RgbaButtonGroup 
             checked={checked}
             handleChecked={setChecked}
-            showAlpha={props.image.getFileType()}
+            showAlpha={props.image.getFileType() === 'png'}
           />}
           {mode === 'default' && <ButtonGroup>
             <Button
@@ -76,7 +79,7 @@ const DecodeFile = props => {
               Decode
             </Button>
             <Button
-              onClick={() => {}}
+              onClick={() => {props.setView('file-options')}}
               variant="outline-secondary"
             >
               Back
@@ -86,11 +89,12 @@ const DecodeFile = props => {
             <Button
               onClick={() => {handleCopy()}}
               variant="outline-primary"
+              disabled={message.length === 0}
             >
               Copy to clipboard
             </Button>
             <Button
-              onClick={() => {}}
+              onClick={() => {setMode('default')}}
               variant="outline-secondary"
             >
               Back

@@ -21,9 +21,7 @@ const App = () => {
 
   return (
     <div className="app">
-      <NavigationBar 
-        navigateHome={() => setView('upload-file')}
-      />
+      <NavigationBar />
       {view === 'upload-file' && <UploadFile 
         setView={setView} 
         image={imageParser}
